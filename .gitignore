@@ -1,0 +1,39 @@
+# Compiled output
+target/
+*.class
+*.war
+*.jar
+
+# IDE and tool files
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+
+# Database credentials (use db.properties.example as template)
+# Uncomment the line below if you want to keep credentials out of git:
+# src/main/resources/db.properties
+
+# Maven
+.mvn/timing.properties
+.mvn/wrapper/maven-wrapper.jar
+
+# Node
+node_modules/
+
+# Uploads
+src/main/webapp/uploads/
+
+# Temp files
+*.tmp
+*.bak
