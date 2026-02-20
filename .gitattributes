@@ -1,0 +1,3 @@
+# GitHub linguist configuration
+*.sql linguist-detectable=true
+*.jsp linguist-detectable=true
