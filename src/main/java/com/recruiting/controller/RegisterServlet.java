@@ -51,18 +51,32 @@ public class RegisterServlet extends HttpServlet {
             return;
         }
 
-        // Password validation
-        if (password.length() < 6) {
+        // Password strength validation
+        if (password.length() < 8) {
             result.put("success", false);
-            result.put("message", "Password must be at least 6 characters");
+            result.put("message", "Password must be at least 8 characters");
             out.print(gson.toJson(result));
             return;
         }
 
-        // Name validation
+        if (!password.matches(".*[A-Z].*") || !password.matches(".*[0-9].*")) {
+            result.put("success", false);
+            result.put("message", "Password must contain at least one uppercase letter and one digit");
+            out.print(gson.toJson(result));
+            return;
+        }
+
+        // Name validation - must be at least 2 characters and contain only letters/spaces
         if (name.trim().length() < 2) {
             result.put("success", false);
             result.put("message", "Name must be at least 2 characters");
+            out.print(gson.toJson(result));
+            return;
+        }
+
+        if (!name.trim().matches("^[\\p{L} .'-]+$")) {
+            result.put("success", false);
+            result.put("message", "Name contains invalid characters");
             out.print(gson.toJson(result));
             return;
         }
