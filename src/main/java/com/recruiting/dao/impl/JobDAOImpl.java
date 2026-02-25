@@ -146,6 +146,17 @@ public class JobDAOImpl implements JobDAO {
         return list;
     }
 
+    /**
+     * Escape special SQL LIKE pattern characters to prevent injection
+     * through wildcard manipulation in search queries.
+     */
+    private String escapeLikePattern(String input) {
+        if (input == null) return "";
+        return input.replace("\\", "\\\\")
+                     .replace("%", "\\%")
+                     .replace("_", "\\_");
+    }
+
     @Override
     public List<Job> searchJobs(String keyword) {
         String sql = "SELECT * FROM jobs WHERE status = 'ACTIVE' AND " +
@@ -156,7 +167,7 @@ public class JobDAOImpl implements JobDAO {
         try {
             con = DatabaseConnection.getConnection();
             try (PreparedStatement ps = con.prepareStatement(sql)) {
-                String searchPattern = "%" + keyword + "%";
+                String searchPattern = "%" + escapeLikePattern(keyword) + "%";
                 ps.setString(1, searchPattern);
                 ps.setString(2, searchPattern);
                 ps.setString(3, searchPattern);
@@ -189,7 +200,7 @@ public class JobDAOImpl implements JobDAO {
         try {
             con = DatabaseConnection.getConnection();
             try (PreparedStatement ps = con.prepareStatement(sql)) {
-                String searchPattern = "%" + keyword + "%";
+                String searchPattern = "%" + escapeLikePattern(keyword) + "%";
                 ps.setString(1, searchPattern);
                 ps.setString(2, searchPattern);
                 ps.setString(3, searchPattern);
@@ -221,7 +232,7 @@ public class JobDAOImpl implements JobDAO {
         try {
             con = DatabaseConnection.getConnection();
             try (PreparedStatement ps = con.prepareStatement(sql)) {
-                String searchPattern = "%" + keyword + "%";
+                String searchPattern = "%" + escapeLikePattern(keyword) + "%";
                 ps.setString(1, searchPattern);
                 ps.setString(2, searchPattern);
                 ps.setString(3, searchPattern);
