@@ -96,7 +96,34 @@ $(document).ajaxError(function(event, xhr) {
             var basePath = window.location.pathname.includes('/admin/') ||
                 window.location.pathname.includes('/recruiter/') ||
                 window.location.pathname.includes('/candidate/') ? '../' : '';
-            window.location.href = basePath + 'login.jsp';
+            window.location.href = basePath + 'login.jsp?expired=true';
         }, 2000);
     }
 });
+
+// Periodic session check - polls server every 5 minutes to detect expiration
+(function() {
+    var SESSION_CHECK_INTERVAL = 5 * 60 * 1000; // 5 minutes
+
+    function checkSession() {
+        $.ajax({
+            url: (window.contextPath || '') + '/api/session',
+            method: 'GET',
+            dataType: 'json',
+            success: function(data) {
+                if (!data.valid) {
+                    var msg = (typeof i18n !== 'undefined') ? i18n.t('common.sessionExpired', 'Session expired. Redirecting to login...') : 'Session expired.';
+                    showToast(msg, 'warning');
+                    setTimeout(function() {
+                        window.location.href = (window.contextPath || '') + '/login.jsp?expired=true';
+                    }, 1500);
+                }
+            }
+        });
+    }
+
+    // Only run session checks on protected pages
+    if (window.location.pathname.match(/\/(admin|recruiter|candidate)\//)) {
+        setInterval(checkSession, SESSION_CHECK_INTERVAL);
+    }
+})();

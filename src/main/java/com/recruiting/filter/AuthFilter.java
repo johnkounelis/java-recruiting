@@ -29,8 +29,24 @@ public class AuthFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         HttpSession session = httpRequest.getSession(false);
         
+        boolean isAjax = "XMLHttpRequest".equals(httpRequest.getHeader("X-Requested-With"));
+
         if (session == null || session.getAttribute("user") == null) {
-            httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp");
+            if (isAjax) {
+                // Return 401 for AJAX requests so client-side can handle redirect
+                httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                httpResponse.setContentType("application/json");
+                httpResponse.getWriter().write("{\"error\":\"Session expired\",\"redirect\":\"login.jsp\"}");
+            } else {
+                // Store the originally requested URL so we can redirect back after login
+                String requestedUrl = httpRequest.getRequestURI();
+                String queryString = httpRequest.getQueryString();
+                if (queryString != null) {
+                    requestedUrl += "?" + queryString;
+                }
+                httpRequest.getSession(true).setAttribute("redirectAfterLogin", requestedUrl);
+                httpResponse.sendRedirect(httpRequest.getContextPath() + "/login.jsp?expired=true");
+            }
             return;
         }
         
