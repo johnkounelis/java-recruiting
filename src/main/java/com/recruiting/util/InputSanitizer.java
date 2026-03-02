@@ -83,4 +83,59 @@ public class InputSanitizer {
             return false;
         return email.matches("^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
     }
+
+    /**
+     * Performs comprehensive email validation including domain checks.
+     * Returns a descriptive error message or null if the email is valid.
+     */
+    public static String validateEmail(String email) {
+        if (email == null || email.trim().isEmpty()) {
+            return "Email address is required";
+        }
+
+        String trimmed = email.trim();
+
+        if (trimmed.length() > MAX_EMAIL_LENGTH) {
+            return "Email address is too long (max " + MAX_EMAIL_LENGTH + " characters)";
+        }
+
+        if (!trimmed.contains("@")) {
+            return "Email address must contain '@'";
+        }
+
+        String[] parts = trimmed.split("@", -1);
+        if (parts.length != 2 || parts[0].isEmpty() || parts[1].isEmpty()) {
+            return "Invalid email format";
+        }
+
+        String domain = parts[1];
+        if (!domain.contains(".")) {
+            return "Email domain must contain a dot (e.g., example.com)";
+        }
+
+        if (!isValidEmail(trimmed)) {
+            return "Email address contains invalid characters";
+        }
+
+        return null; // valid
+    }
+
+    /**
+     * Validates password strength and returns an error message or null if valid.
+     */
+    public static String validatePassword(String password) {
+        if (password == null || password.isEmpty()) {
+            return "Password is required";
+        }
+        if (password.length() < 8) {
+            return "Password must be at least 8 characters";
+        }
+        if (!password.matches(".*[A-Z].*")) {
+            return "Password must contain at least one uppercase letter";
+        }
+        if (!password.matches(".*[0-9].*")) {
+            return "Password must contain at least one digit";
+        }
+        return null; // valid
+    }
 }
