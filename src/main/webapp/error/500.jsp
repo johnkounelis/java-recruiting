@@ -22,16 +22,24 @@
         <div class="row justify-content-center">
             <div class="col-md-6 text-center">
                 <div class="card p-5 border-0" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2);">
-                    <i class="bi bi-gear text-danger mb-3" style="font-size: 4rem;"></i>
-                    <h1 class="display-1 fw-bold text-white">500</h1>
-                    <h3 class="text-white mb-3">Server Error</h3>
-                    <p class="text-white-50 mb-4">Something went wrong on our end. Please try again later.</p>
+                    <div class="mb-4">
+                        <i class="bi bi-gear text-danger" style="font-size: 4rem;"></i>
+                    </div>
+                    <h1 class="display-1 fw-bold text-white mb-2">500</h1>
+                    <h3 class="text-white mb-3">Internal Server Error</h3>
+                    <p class="text-white-50 mb-2">Something went wrong on our end. Please try again later.</p>
+                    <p class="text-white-50 mb-4 small">Our team has been notified and is working on a fix.</p>
                     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                        <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-primary btn-lg px-4">
+                        <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-primary btn-lg px-4 shadow">
                             <i class="bi bi-house me-2"></i>Home
                         </a>
-                        <a href="javascript:history.back()" class="btn btn-outline-light btn-lg px-4">
-                            <i class="bi bi-arrow-left me-2"></i>Go Back
+                        <a href="javascript:location.reload()" class="btn btn-outline-light btn-lg px-4">
+                            <i class="bi bi-arrow-clockwise me-2"></i>Try Again
+                        </a>
+                    </div>
+                    <div class="mt-4">
+                        <a href="javascript:history.back()" class="text-white-50 text-decoration-none small">
+                            <i class="bi bi-arrow-left me-1"></i>Go back to previous page
                         </a>
                     </div>
                 </div>

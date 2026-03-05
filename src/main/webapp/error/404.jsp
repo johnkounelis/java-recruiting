@@ -22,16 +22,24 @@
         <div class="row justify-content-center">
             <div class="col-md-6 text-center">
                 <div class="card p-5 border-0" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2);">
-                    <i class="bi bi-exclamation-triangle text-warning mb-3" style="font-size: 4rem;"></i>
-                    <h1 class="display-1 fw-bold text-white">404</h1>
+                    <div class="mb-4">
+                        <i class="bi bi-exclamation-triangle text-warning" style="font-size: 4rem;"></i>
+                    </div>
+                    <h1 class="display-1 fw-bold text-white mb-2">404</h1>
                     <h3 class="text-white mb-3">Page Not Found</h3>
-                    <p class="text-white-50 mb-4">The page you are looking for does not exist or has been moved.</p>
+                    <p class="text-white-50 mb-2">The page you are looking for does not exist or has been moved.</p>
+                    <p class="text-white-50 mb-4 small">If you believe this is an error, please contact support.</p>
                     <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                        <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-primary btn-lg px-4">
+                        <a href="${pageContext.request.contextPath}/index.jsp" class="btn btn-primary btn-lg px-4 shadow">
                             <i class="bi bi-house me-2"></i>Home
                         </a>
                         <a href="${pageContext.request.contextPath}/jobs.jsp" class="btn btn-outline-light btn-lg px-4">
-                            <i class="bi bi-search me-2"></i>Jobs
+                            <i class="bi bi-search me-2"></i>Browse Jobs
+                        </a>
+                    </div>
+                    <div class="mt-4">
+                        <a href="javascript:history.back()" class="text-white-50 text-decoration-none small">
+                            <i class="bi bi-arrow-left me-1"></i>Go back to previous page
                         </a>
                     </div>
                 </div>
