@@ -93,6 +93,7 @@
             </div>
         </div>
 
+        <div id="paginationInfo" class="text-center text-white-50 small mb-2"></div>
         <nav aria-label="Job pagination" class="pb-5">
             <ul id="paginationContainer" class="pagination justify-content-center mb-0">
             </ul>

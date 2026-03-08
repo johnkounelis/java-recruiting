@@ -58,8 +58,14 @@ $(document).ready(function () {
 
                     if (response.totalPages) {
                         renderPagination(response.currentPage, response.totalPages);
+                        if (response.totalJobs) {
+                            var pageStr = t('jobs.pageInfo', 'Page') + ' ' + response.currentPage + ' / ' + response.totalPages +
+                                ' (' + response.totalJobs + ' ' + t('jobs.totalResults', 'results') + ')';
+                            $('#paginationInfo').text(pageStr);
+                        }
                     } else {
                         $('#paginationContainer').empty();
+                        $('#paginationInfo').empty();
                     }
 
                     if (response.searchTerm) {
@@ -105,15 +111,39 @@ $(document).ready(function () {
             return;
         }
 
+        // Previous button
         paginationHtml += '<li class="page-item ' + (currentPage === 1 ? 'disabled' : '') + '">' +
             '<a class="page-link" href="#" data-page="' + (currentPage - 1) + '" aria-label="Previous">' +
             '<span aria-hidden="true">&laquo;</span></a></li>';
 
-        for (var i = 1; i <= totalPages; i++) {
+        // Show smart page range: first, last, and nearby pages with ellipsis
+        var maxVisible = 5;
+        var startPage = Math.max(1, currentPage - Math.floor(maxVisible / 2));
+        var endPage = Math.min(totalPages, startPage + maxVisible - 1);
+        if (endPage - startPage < maxVisible - 1) {
+            startPage = Math.max(1, endPage - maxVisible + 1);
+        }
+
+        if (startPage > 1) {
+            paginationHtml += '<li class="page-item"><a class="page-link" href="#" data-page="1">1</a></li>';
+            if (startPage > 2) {
+                paginationHtml += '<li class="page-item disabled"><span class="page-link">...</span></li>';
+            }
+        }
+
+        for (var i = startPage; i <= endPage; i++) {
             paginationHtml += '<li class="page-item ' + (currentPage === i ? 'active' : '') + '">' +
                 '<a class="page-link" href="#" data-page="' + i + '">' + i + '</a></li>';
         }
 
+        if (endPage < totalPages) {
+            if (endPage < totalPages - 1) {
+                paginationHtml += '<li class="page-item disabled"><span class="page-link">...</span></li>';
+            }
+            paginationHtml += '<li class="page-item"><a class="page-link" href="#" data-page="' + totalPages + '">' + totalPages + '</a></li>';
+        }
+
+        // Next button
         paginationHtml += '<li class="page-item ' + (currentPage === totalPages ? 'disabled' : '') + '">' +
             '<a class="page-link" href="#" data-page="' + (currentPage + 1) + '" aria-label="Next">' +
             '<span aria-hidden="true">&raquo;</span></a></li>';
