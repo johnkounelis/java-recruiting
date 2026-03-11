@@ -15,9 +15,12 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @WebServlet("/api/login")
 public class LoginServlet extends HttpServlet {
+    private static final Logger logger = Logger.getLogger(LoginServlet.class.getName());
     private UserService userService = new UserService();
     private Gson gson = new Gson();
 
@@ -42,10 +45,12 @@ public class LoginServlet extends HttpServlet {
             }
 
             // Attempt login
+            logger.info("Login attempt for email: " + email);
             Optional<User> userOpt = userService.login(email, password);
-            
+
             if (userOpt.isPresent()) {
                 User user = userOpt.get();
+                logger.info("Successful login for user: " + user.getEmail() + " (role: " + user.getRole() + ")");
                 
                 // Create session - prevent session fixation
                 HttpSession oldSession = request.getSession(false);
@@ -76,6 +81,7 @@ public class LoginServlet extends HttpServlet {
                 String redirectUrl = getRedirectUrl(user.getRole());
                 result.put("redirect", redirectUrl);
             } else {
+                logger.warning("Failed login attempt for email: " + email);
                 result.put("success", false);
                 result.put("message", "Wrong email or password. Please try again.");
             }
@@ -83,18 +89,16 @@ public class LoginServlet extends HttpServlet {
         } catch (RuntimeException e) {
             String errorMsg = e.getMessage();
             if (errorMsg != null && errorMsg.contains("Database")) {
-                System.err.println("Database error in LoginServlet: " + errorMsg);
+                logger.log(Level.SEVERE, "Database error during login", e);
                 result.put("success", false);
                 result.put("message", "Database connection error. Please check your database setup.");
             } else {
-                System.err.println("Error in LoginServlet: " + errorMsg);
+                logger.log(Level.SEVERE, "Runtime error during login: " + errorMsg, e);
                 result.put("success", false);
                 result.put("message", "Login error. Please try again.");
             }
-            e.printStackTrace();
         } catch (Exception e) {
-            System.err.println("Unexpected error in LoginServlet: " + e.getMessage());
-            e.printStackTrace();
+            logger.log(Level.SEVERE, "Unexpected error during login", e);
             result.put("success", false);
             result.put("message", "Unexpected error. Please contact the administrator.");
         } finally {
